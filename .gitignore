@@ -1,0 +1,16 @@
+# Docker
+docker
+
+# ENV
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.env
+.venv
+
+# Idea
+.idea

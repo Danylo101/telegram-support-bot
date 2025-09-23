@@ -1,0 +1,5 @@
+pydantic-settings~=2.10.1
+aiogram~=3.22
+fluentogram~=1.2.1
+motor~=3.7.1
+pydantic~=2.11.7
