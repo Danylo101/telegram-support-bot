@@ -23,18 +23,6 @@ async def create_request(callback: CallbackQuery, locale: TranslatorRunner, db: 
     await callback.message.answer(locale.describe_problem())
     await state.set_state(RequestForm.description)
 
-@router.callback_query(F.data.in_({"confirm_name", "cancel_name"}))
-async def process_name_confirm(callback: CallbackQuery, state: FSMContext, locale: TranslatorRunner, db: MongoDbClient):
-    data = await state.get_data()
-    name = data.get("name")
-
-    if callback.data == "confirm_name":
-        await db.user.insert_one({"id": callback.from_user.id, "name": name})
-        await callback.message.answer(locale.name_saved())
-        await state.clear()
-    else:
-        await callback.message.answer(locale.enter_name_again())
-
 
 @router.callback_query(F.data.in_({"confirm_description", "cancel_description"}))
 async def process_description_confirm(callback: CallbackQuery, state: FSMContext, locale: TranslatorRunner, db: MongoDbClient):
