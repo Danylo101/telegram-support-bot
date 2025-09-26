@@ -6,15 +6,16 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, Contact, ReplyKeyboardMarkup, KeyboardButton
 from fluentogram import TranslatorRunner
 
-from src.handlers.user.user_forms import RegisterForm, RequestForm
+from src.handlers.user.user_forms import RequestForm, ReplyMenuForm
 from src.utils.db import MongoDbClient
+from src.utils.filter import ReplyBtnMenuFilter
 from src.utils.keyboards import create_inline_kb, create_reply_kb
 
 router = Router()
 
 
 @router.message(Command("start"))
-async def start(message: Message, locale: TranslatorRunner, db: MongoDbClient):
+async def start(message: Message, locale: TranslatorRunner, db: MongoDbClient, state: FSMContext):
     user = await db.user.find_one({"id": message.from_user.id})
     if user is None:
         kb = ReplyKeyboardMarkup(
@@ -56,7 +57,7 @@ async def process_description(message: Message, locale: TranslatorRunner, state:
     await message.answer(locale.is_correct_description(), reply_markup=kb)
 
 
-@router.message(F.text & ~F.text.startswith("/"))
+@router.message(ReplyBtnMenuFilter())
 async def handle_reply_btn(message: Message, locale: TranslatorRunner, db: MongoDbClient, state: FSMContext):
     text = message.text
     if text == locale.create_request():
