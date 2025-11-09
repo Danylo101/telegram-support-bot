@@ -1,3 +1,4 @@
+cachetools~=6.2.1
 pydantic-settings~=2.10.1
 aiogram~=3.22
 fluentogram~=1.2.1

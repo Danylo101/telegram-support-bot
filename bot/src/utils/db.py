@@ -3,8 +3,7 @@ import motor.motor_asyncio
 from typing import List, Any
 from pydantic import BaseModel
 
-from src.model.ticket import Ticket
-from src.model.user import User
+from src.model.models import User, Ticket, Category, KnowledgeBaseArticle, Feedback
 from src.utils.config import settings
 
 client = motor.motor_asyncio.AsyncIOMotorClient(
@@ -151,10 +150,16 @@ class MongoDbClient(BaseModel):
     MongoDb models initiate
     """
     tickets: Any
-    user: Any
+    users: Any
+    categories: Any
+    knowledge_base: Any
+    feedback: Any
 
 
 db = MongoDbClient(
     tickets=Collection(collection_name="tickets", model=Ticket),
-    user=Collection(collection_name="users", model=User)
+    users=Collection(collection_name="users", model=User),
+    categories=Collection(collection_name="categories", model=Category),
+    knowledge_base=Collection(collection_name="knowledge_base", model=KnowledgeBaseArticle),
+    feedback=Collection(collection_name="feedback", model=Feedback)
 )

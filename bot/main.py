@@ -10,7 +10,7 @@ from fluentogram import TranslatorHub, FluentTranslator
 from src.utils.db import db
 from src.utils.config import settings
 from src.handlers import router as main_router
-from src.utils.middelware import TranslateMiddleware, DataBaseMiddleware
+from src.utils.middelware import TranslateMiddleware, DataBaseMiddleware, ThrottlingMiddleware
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -45,9 +45,11 @@ async def main():
 
     dp = Dispatcher(t_hub=t_hub)
 
+    dp.message.middleware(ThrottlingMiddleware())
     dp.message.outer_middleware(TranslateMiddleware())
     dp.message.outer_middleware(DataBaseMiddleware(db=db))
 
+    dp.callback_query.middleware(ThrottlingMiddleware())
     dp.callback_query.outer_middleware(TranslateMiddleware())
     dp.callback_query.outer_middleware(DataBaseMiddleware(db=db))
 

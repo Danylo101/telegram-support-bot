@@ -31,10 +31,10 @@ def admin_required(handler):
     async def wrapper(event, *args, **kwargs):
         user = getattr(event, "from_user", None)
         if user is None:
-            raise SkipHandler()
+            return SkipHandler()
 
         if not is_admin(user.id):
-            raise SkipHandler()
+            return SkipHandler()
 
         return await handler(event,  *args, **kwargs)
     return wrapper
